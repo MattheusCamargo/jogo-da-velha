@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>Jogo da Velha - Mattheus Camargo Dev</title>
+    <style>
+
+        /* Adicione estas media queries dentro da tag <style> */
+
+/* Estilos para dispositivos móveis */
+@media screen and (max-width: 768px) {
+    .container {
+        padding: 15px;
+        width: 90%;
+        margin: 10px auto;
+    }
+
+    .board {
+        grid-template-columns: repeat(3, 90px);
+        gap: 5px;
+        padding: 10px;
+    }
+
+    .cell {
+        width: 90px;
+        height: 90px;
+        font-size: 40px;
+    }
+
+    .scores {
+        font-size: 18px;
+    }
+
+    .player-names-edit {
+        padding: 10px;
+    }
+
+    .player-names-edit input {
+        padding: 8px;
+        font-size: 14px;
+        width: 90%;
+        margin: 5px auto;
+    }
+
+    .saveNames {
+        padding: 10px 20px;
+        font-size: 14px;
+        width: 90%;
+        margin: 10px auto;
+    }
+
+    .mode-button, .piece-button {
+        padding: 8px 16px;
+        font-size: 14px;
+        width: 90%;
+        margin: 5px auto;
+        display: block;
+    }
+
+    .restart-button {
+        padding: 10px 20px;
+        font-size: 16px;
+        width: 45%;
+    }
+
+    .restart-button-container {
+        flex-wrap: wrap;
+    }
+
+    .winner-alert {
+        width: 80%;
+        font-size: 18px;
+        padding: 15px;
+    }
+
+    .winner-alert button {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    .record-display {
+        padding: 10px;
+        margin: 10px 0;
+    }
+
+    .record-display h4 {
+        font-size: 16px;
+    }
+
+    #record-holder, #record-score {
+        font-size: 14px;
+    }
+
+    .player-names-display {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .edit-icon {
+        font-size: 14px;
+    }
+}
+
+/* Ajustes para telas muito pequenas */
+@media screen and (max-width: 320px) {
+    .board {
+        grid-template-columns: repeat(3, 70px);
+    }
+
+    .cell {
+        width: 70px;
+        height: 70px;
+        font-size: 30px;
+    }
+
+    .scores {
+        font-size: 16px;
+    }
+
+    .restart-button {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
+
+/* Ajuste para orientação paisagem em dispositivos móveis */
+@media screen and (max-height: 500px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        transform: scale(0.8);
+        transform-origin: top center;
+    }
+
+    .board {
+        margin: 10px auto;
+    }
+}
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom right, #e0eafc, #cfdef3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+
+      .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+      .scores {
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .scores h3 {
+            color: #555;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 120px);
+            gap: 10px;
+            background: #444;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .cell {
+            width: 120px;
+            height: 120px;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .cell:hover {
+            background-color: #ddd;
+        }
+
+        .restart-button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;  /* Espaçamento entre os botões */
+            margin-top: 20px;
+        }
+
+        .restart-button {
+            padding: 15px 30px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        .restart-button:hover {
+            background-color: #0056b3;
+        }
+
+        .aviso {
+            font-size: 12px;
+            color: #888;
+            margin-top: 10px;
+        }
+
+        .developer-info {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .developer-info p {
+            margin: 5px 0;
+        }
+
+        p {
+            margin: 5px;
+            align-content: first baseline;
+        }
+
+        .winner-alert {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .winner-alert span {
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .winner-alert button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .winner-alert button:hover {
+            background-color: #0056b3;
+        }
+
+        .scores div {
+            transition: color 0.3s, font-weight 0.3s;
+        }
+
+        .scores div.winning {
+            color: green;
+            font-weight: bold;
+            font-size: 26px;
+        }
+        .edit-icon {
+          cursor: pointer;
+          margin-left: 5px;
+          font-size: 0.8em; /* Ajuste o tamanho do ícone se necessário */
+        }
+
+        .player-names-edit {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          margin-bottom: 20px;
+        }
+
+        .player-names-edit input {
+              padding: 8px;
+              border: 1px solid #ccc;
+              border-radius: 5px;
+              font-size: 16px;
+        }
+        .player-names-display{
+            margin-bottom: 12px;
+        }
+         .scores div b{
+          margin: 3px;
+        }
+
+        .saveNames {
+            padding: 15px 30px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .saveNames:hover {
+            background-color: #0056b3;
+        }
+        .game-mode-selection {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .mode-button, .piece-button {
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .mode-button:hover, .piece-button:hover {
+            background-color: #0056b3;
+        }
+
+        #player-choice {
+            margin-top: 20px;
+        }
+
+        .record-display {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .record-display h4 {
+            color: #ffd700;
+            margin: 0 0 10px 0;
+        }
+
+        #record-holder {
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 5px;
+        }
+
+        .champion-player {
+            color: #ffd700;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .champion-player::after {
+            content: '👑';
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <p>Desenvolvedor: Mattheus Camargo</p>
+    <p>Tecnologia empregada: JavaScript</p>
+    <div class="container">
+        <div class="game-mode-selection">
+            <h3>Escolha o modo de jogo:</h3>
+            <button id="two-players" class="mode-button">Dois Jogadores</button>
+            <button id="single-player" class="mode-button">Jogar contra computador</button>
+            
+            <div id="player-choice" style="display: none;">
+                <h4>Escolha sua peça:</h4>
+                <button id="choose-x" class="piece-button">Jogar com ❌</button>
+                <button id="choose-o" class="piece-button">Jogar com ⭕</button>
+            </div>
+        </div>
+
+        <div class="scores">
+            <h3>O jogo começou!</h3>
+            <div class="player-names-display">
+                <div><b id="displayPlayerX">Player ❌</b>: <span id="scoreX">0</span> <span class="edit-icon" data-player="x">&#9998;</span></div>  <div><b id="displayPlayerO">Player ⭕</b>: <span id="scoreO">0</span> <span class="edit-icon" data-player="o">&#9998;</span></div>
+            </div>
+
+            <div class="player-names-edit" style="display: none;">  <label for="playerXName">Jogador ❌:</label>
+                  <input type="text" id="playerXName" placeholder="Nome do Jogador ❌">
+                  <label for="playerOName">Jogador ⭕:</label>
+                  <input type="text" id="playerOName" placeholder="Nome do Jogador ⭕">
+                  <button id="saveNames" class="saveNames">Salvar Nomes</button>
+            </div>
+
+            <p class="aviso"><b>IMPORTANTE: </b>O X sempre começa</p>
+
+            <div class="record-display">
+                <h4>🏆 Recordista</h4>
+                <div id="record-holder">Nenhum recordista ainda</div>
+                <div id="record-score">Recorde: 0</div>
+            </div>
+        </div>
+
+        <div class="board">
+            <div class="cell" onclick="makeMove(0)"></div>
+            <div class="cell" onclick="makeMove(1)"></div>
+            <div class="cell" onclick="makeMove(2)"></div>
+            <div class="cell" onclick="makeMove(3)"></div>
+            <div class="cell" onclick="makeMove(4)"></div>
+            <div class="cell" onclick="makeMove(5)"></div>
+            <div class="cell" onclick="makeMove(6)"></div>
+            <div class="cell" onclick="makeMove(7)"></div>
+            <div class="cell" onclick="makeMove(8)"></div>
+        </div>
+
+        <div class="restart-button-container">
+            <button id="restart-game" class="restart-button">🔄 Reiniciar Jogo</button>
+            <button id="change-mode" class="restart-button">↩️ Alterar Modo</button>
+        </div>
+    </div>
+    <p>Versão 2.0</p>
+
+
+    <script>
+
+        let isSinglePlayer = false;
+        let computerPlayer = '';
+        let humanPlayer = '';
+        let recordHolder = {
+            name: '',
+            score: 0
+        };
+
+        document.querySelector('.board').style.display = 'none';
+        document.querySelector('.scores').style.display = 'none';
+        document.getElementById('restart-game').style.display = 'none';
+        document.getElementById('change-mode').style.display = 'none';
+
+        // Event listeners para seleção de modo
+        document.getElementById('two-players').addEventListener('click', () => {
+        isSinglePlayer = false;
+        startGame();
+        });
+
+        document.getElementById('single-player').addEventListener('click', () => {
+            document.querySelector('.game-mode-selection h3').style.display = 'none';
+            document.getElementById('two-players').style.display = 'none';
+            document.getElementById('single-player').style.display = 'none';
+            document.getElementById('player-choice').style.display = 'block';
+            document.getElementById('restart-game').style.display = 'none';
+            document.getElementById('change-mode').style.display = 'none'; // Garante que o botão está oculto
+        });
+
+        document.getElementById('choose-x').addEventListener('click', () => {
+            isSinglePlayer = true;
+            humanPlayer = 'x';
+            computerPlayer = 'o';
+            startGame();
+        });
+
+        document.getElementById('choose-o').addEventListener('click', () => {
+            isSinglePlayer = true;
+            humanPlayer = 'o';
+            computerPlayer = 'x';
+            startGame();
+            // Como o jogador escolheu O e X sempre começa, fazemos a primeira jogada do computador
+            setTimeout(() => {
+                computerMove();
+                currentPlayer = humanPlayer;
+            }, 500);
+        });
+
+        // Função para verificar e atualizar o recorde
+        function checkAndUpdateRecord(player) {
+            // Se for o computador, não atualiza o recorde
+            if (isSinglePlayer && player === computerPlayer) {
+                return;
+            }
+
+            const playerName = player === 'x' ? 
+                document.getElementById('playerXName').value || "Player X" : 
+                document.getElementById('playerOName').value || "Player O";
+    
+            const currentScore = scores[player];
+
+            if (currentScore > recordHolder.score) {
+                recordHolder = {
+                    name: playerName,
+                    score: currentScore
+                };
+        
+                // Atualiza a exibição do recorde
+                document.getElementById('record-holder').textContent = `${playerName}`;
+                document.getElementById('record-score').textContent = `Recorde: ${currentScore}`;
+        
+                // Adiciona classe de campeão ao jogador atual
+                updateChampionStyle();
+            }
+        }
+
+        // Função para atualizar o estilo do campeão
+        function updateChampionStyle() {
+            // Remove a classe champion-player de todos os displays de nome
+            document.getElementById('displayPlayerX').classList.remove('champion-player');
+            document.getElementById('displayPlayerO').classList.remove('champion-player');
+    
+            // Adiciona a classe ao recordista atual
+            const playerXName = document.getElementById('playerXName').value || "Player X";
+            const playerOName = document.getElementById('playerOName').value || "Player O";
+    
+            if (recordHolder.name === playerXName) {
+                document.getElementById('displayPlayerX').classList.add('champion-player');
+            } else if (recordHolder.name === playerOName) {
+                document.getElementById('displayPlayerO').classList.add('champion-player');
+            }
+        }
+
+        function startGame() {
+            document.querySelector('.game-mode-selection').style.display = 'none';
+            document.querySelector('.board').style.display = 'grid';
+            document.querySelector('.scores').style.display = 'block';
+            document.getElementById('restart-game').style.display = 'inline-block';
+            document.getElementById('change-mode').style.display = 'inline-block'; // Mostra o botão de alterar modo
+            resetGame();
+        }
+
+        // Modifique os event listeners do modo de jogo
+        document.getElementById('single-player').addEventListener('click', () => {
+            document.querySelector('.game-mode-selection h3').style.display = 'none';
+            document.getElementById('two-players').style.display = 'none';
+            document.getElementById('single-player').style.display = 'none';
+            document.getElementById('player-choice').style.display = 'block';
+            document.getElementById('restart-game').style.display = 'none'; // Garante que o botão está oculto
+        });
+
+        // Adicione o event listener para o botão de alterar modo
+        document.getElementById('change-mode').addEventListener('click', function() {
+            // Resetar variáveis importantes
+            isSinglePlayer = false;
+            computerPlayer = '';
+            humanPlayer = '';
+            scores = { x: 0, o: 0 };
+    
+            // Atualizar placar
+            document.getElementById('scoreX').textContent = '0';
+            document.getElementById('scoreO').textContent = '0';
+    
+            // Ocultar elementos do jogo
+            document.querySelector('.board').style.display = 'none';
+            document.querySelector('.scores').style.display = 'none';
+            document.getElementById('restart-game').style.display = 'none';
+            document.getElementById('change-mode').style.display = 'none';
+            
+            // Resetar o recorde
+            recordHolder = {
+                name: '',
+                score: 0
+            };
+            document.getElementById('record-holder').textContent = 'Nenhum recordista ainda';
+            document.getElementById('record-score').textContent = 'Recorde: 0';
+    
+            // Remove a classe champion-player de todos os displays de nome
+            document.getElementById('displayPlayerX').classList.remove('champion-player');
+            document.getElementById('displayPlayerO').classList.remove('champion-player');
+
+            // Mostrar seleção de modo
+            document.querySelector('.game-mode-selection').style.display = 'block';
+            document.querySelector('.game-mode-selection h3').style.display = 'block';
+            document.getElementById('two-players').style.display = 'inline-block';
+            document.getElementById('single-player').style.display = 'inline-block';
+            document.getElementById('player-choice').style.display = 'none';
+    
+            // Resetar o tabuleiro
+            resetGame();
+        });
+
+        // Função para jogada do computador
+            function computerMove() {
+                if (!isSinglePlayer) return;
+    
+        // Lista de células vazias
+        const emptyCells = gameBoard.reduce((acc, cell, index) => {
+            if (cell === '') acc.push(index);
+            return acc;
+        }, []);
+    
+        if (emptyCells.length === 0) return;
+    
+        // Primeiro, verifica se pode vencer
+            for (let index of emptyCells) {
+                gameBoard[index] = computerPlayer;
+            if (checkWinner()?.winner === computerPlayer) {
+                squares[index].textContent = computerPlayer.toUpperCase();
+            return;
+        }
+        gameBoard[index] = ''; // desfaz a jogada de teste
+    }
+    
+    // Depois, verifica se precisa bloquear o jogador
+    for (let index of emptyCells) {
+        gameBoard[index] = humanPlayer;
+        if (checkWinner()?.winner === humanPlayer) {
+            gameBoard[index] = computerPlayer;
+            squares[index].textContent = computerPlayer.toUpperCase();
+            return;
+        }
+        gameBoard[index] = ''; // desfaz a jogada de teste
+    }
+    
+    // Se não houver jogada crítica, tenta ocupar o centro
+    if (gameBoard[4] === '') {
+        gameBoard[4] = computerPlayer;
+        squares[4].textContent = computerPlayer.toUpperCase();
+        return;
+    }
+    
+    // Caso contrário, faz uma jogada aleatória
+    const randomIndex = Math.floor(Math.random() * emptyCells.length);
+    const movePosition = emptyCells[randomIndex];
+    
+    gameBoard[movePosition] = computerPlayer;
+    squares[movePosition].textContent = computerPlayer.toUpperCase();
+}
+
+        // Adicionar no início do script, junto com as outras variáveis
+        let scores = {
+            x: 0,
+            o: 0
+        };
+
+        const squares = document.querySelectorAll('.cell');
+        let currentPlayer = 'x';
+        let gameBoard = ['', '', '', '', '', '', '', '', ''];
+        const editIcons = document.querySelectorAll('.edit-icon');
+        const playerNamesEditDiv = document.querySelector('.player-names-edit');
+        const saveNamesButton = document.getElementById('saveNames');
+        
+        let originalNames = {}; // Objeto para armazenar os nomes originais
+
+        function toggleEditMode() {
+            if (playerNamesEditDiv.style.display === 'none') {
+              // Modo de visualização -> Modo de edição
+                playerNamesEditDiv.style.display = 'flex';
+
+              // Armazena os nomes atuais antes de editar
+                originalNames.x = document.getElementById('playerXName').value;
+                originalNames.o = document.getElementById('playerOName').value;
+            }
+        }
+
+        editIcons.forEach(icon => {
+            icon.addEventListener('click', toggleEditMode);
+        });
+
+        saveNamesButton.addEventListener('click', () => {
+            updateDisplayNames();  //Atualiza nomes
+            playerNamesEditDiv.style.display = 'none'; // Oculta a edição
+        });
+
+        updateDisplayNames(); //Para setar inicialmente os nomes padrões
+        function updateDisplayNames() {
+            const playerXName = document.getElementById('playerXName').value || "Player X";
+            const playerOName = document.getElementById('playerOName').value || "Player O";
+            document.getElementById('displayPlayerX').textContent = `${playerXName} ❌`;
+            document.getElementById('displayPlayerO').textContent = `${playerOName} ⭕`;
+        }
+
+      function showWinnerAlert(winner) {
+        const alertDiv = document.createElement('div');
+        alertDiv.classList.add('winner-alert');
+
+        let message = "";
+        if (winner === 'draw') {
+            message = "Empate!";
+        } else {
+            const playerName = winner === 'x' ? document.getElementById('playerXName').value : document.getElementById('playerOName').value;
+            message = `🎉 O vencedor é <span>${playerName.toUpperCase()}</span>! 🥳`;
+        }
+
+        alertDiv.innerHTML = message;
+
+        const okButton = document.createElement('button');
+        okButton.textContent = 'OK';
+        okButton.addEventListener('click', () => {
+          alertDiv.remove();
+        });
+        alertDiv.appendChild(okButton);
+
+        document.body.appendChild(alertDiv);
+    }
+
+    function checkWinner() {
+        const winPatterns = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+            [0, 4, 8], [2, 4, 6]             // Diagonals
+        ];
+
+        for (const combination of winPatterns) {
+            const [a, b, c] = combination;
+            if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+                return { winner: gameBoard[a], winningSquares: [squares[a], squares[b], squares[c]] };
+            }
+        }
+
+        if (gameBoard.every(cell => cell !== '')) {
+            return { winner: 'draw', winningSquares: [] };
+        }
+
+        return null; // No winner
+    }
+
+      function highlightWinner(winningSquares) {
+        winningSquares.forEach(square => {
+            square.style.backgroundColor = 'yellow';
+        });
+    }
+
+    function makeMove(index) {
+    if (gameBoard[index] || checkWinner()) {
+        return;
+    }
+
+    if (isSinglePlayer && currentPlayer !== humanPlayer) {
+        return; // Impede o jogador de fazer movimento quando é vez do computador
+    }
+
+    gameBoard[index] = currentPlayer;
+    squares[index].textContent = currentPlayer.toUpperCase();
+
+    const result = checkWinner();
+    if (result) {
+        if (result.winner === 'draw') {
+            showWinnerAlert('draw');
+        } else {
+            showWinnerAlert(result.winner);
+            highlightWinner(result.winningSquares);
+            updateScore(result.winner);
+        }
+    } else {
+        currentPlayer = currentPlayer === 'x' ? 'o' : 'x';
+        if (isSinglePlayer && currentPlayer === computerPlayer) {
+            setTimeout(() => {
+                computerMove();
+                const result = checkWinner();
+                if (result) {
+                    if (result.winner === 'draw') {
+                        showWinnerAlert('draw');
+                    } else {
+                        showWinnerAlert(result.winner);
+                        highlightWinner(result.winningSquares);
+                        updateScore(result.winner);
+                    }
+                } else {
+                    currentPlayer = humanPlayer;
+                }
+            }, 500);
+        }
+    }
+}
+    document.getElementById('restart-game').addEventListener('click', function() {
+        // Limpa o tabuleiro visual
+        const cells = document.querySelectorAll('.cell');
+        cells.forEach(cell => {
+            cell.textContent = '';
+            cell.style.backgroundColor = '#eee';
+        });
+        gameBoard = ['', '', '', '', '', '', '', '', ''];
+        currentPlayer = 'x';
+        updateDisplayNames();
+        // Removidas as linhas que zeravam o placar
+    });
+
+    function updateScore(player, value) {
+        if (value !== undefined) {
+            scores[player] = value;
+        } else {
+            scores[player]++;
+        }
+        document.getElementById(`score${player.toUpperCase()}`).textContent = scores[player];
+        checkAndUpdateRecord(player); // Adicione esta linha
+    }
+
+    function resetGame() {
+        const cells = document.querySelectorAll('.cell');
+        cells.forEach(cell => {
+            cell.textContent = '';
+            cell.style.backgroundColor = '#eee';
+        });
+        gameBoard = ['', '', '', '', '', '', '', '', ''];
+        currentPlayer = 'x';
+        updateDisplayNames();
+        // Removidas as linhas que zeravam o placar
+    }
+
+    </script>
