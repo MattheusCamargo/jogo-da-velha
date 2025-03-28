@@ -424,6 +424,22 @@
         margin-bottom: 20px;
         width: 90vw; /* Ajusta a largura do tabuleiro para caber na tela */
         max-width: 400px; /* Limita o tamanho máximo */
+        height: auto; /* Permite que a altura seja proporcional */
+    }
+
+    @media screen and (max-width: 360px) {
+        .board {
+            gap: 3px;
+            width: 95vw; /* Ajusta a largura para telas menores */
+        }
+    }
+
+    @media screen and (max-height: 800px) {
+        .board {
+            margin: 10px auto;
+            transform: scale(0.9); /* Reduz o tamanho proporcionalmente */
+            transform-origin: top center;
+        }
     }
 
     .cell {
