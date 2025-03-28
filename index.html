@@ -411,7 +411,106 @@
                 font-size: calc(8px + 1.2vw);
             }
         }
-    </style>
+
+    /* Ajuste dinâmico para o tabuleiro e células */
+    .board {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+        background: #444;
+        padding: 10px;
+        border-radius: 15px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        margin-bottom: 20px;
+        width: 90vw; /* Ajusta a largura do tabuleiro para caber na tela */
+        max-width: 400px; /* Limita o tamanho máximo */
+    }
+
+    .cell {
+        width: 100%;
+        aspect-ratio: 1; /* Garante que as células sejam quadradas */
+        background: #eee;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: calc(10px + 4vw); /* Tamanho da fonte ajustável */
+        cursor: pointer;
+        border-radius: 10px;
+        transition: background-color 0.3s ease;
+    }
+
+    .cell:hover {
+        background-color: #ddd;
+    }
+
+    .container {
+        width: 95vw; /* Ajusta a largura do container para caber na tela */
+        max-width: 450px; /* Limita o tamanho máximo */
+        margin: 0 auto; /* Centraliza o container */
+    }
+
+    .scores {
+        font-size: calc(12px + 1vw); /* Ajusta o tamanho da fonte dinamicamente */
+        text-align: center;
+    }
+
+    .winner-alert {
+        width: 90%;
+        font-size: calc(14px + 2vw); /* Ajusta o tamanho da fonte dinamicamente */
+        padding: 15px;
+    }
+
+    .winner-alert button {
+        font-size: calc(12px + 1vw); /* Ajusta o tamanho do botão dinamicamente */
+    }
+
+    .restart-button {
+        font-size: calc(10px + 1.5vw); /* Ajusta o tamanho do botão dinamicamente */
+    }
+
+    .record-display h4 {
+        font-size: calc(12px + 1vw); /* Ajusta o tamanho do título dinamicamente */
+    }
+
+    #record-holder, #record-score {
+        font-size: calc(10px + 0.8vw); /* Ajusta o tamanho do texto dinamicamente */
+    }
+
+    /* Ajustes para telas muito pequenas */
+    @media screen and (max-width: 360px) {
+        .board {
+            gap: 3px;
+        }
+
+        .cell {
+            font-size: calc(8px + 3vw);
+        }
+
+        .scores {
+            font-size: calc(10px + 1vw);
+        }
+
+        .restart-button {
+            font-size: calc(8px + 1.2vw);
+        }
+    }
+
+    /* Ajuste para telas verticais */
+    @media screen and (max-height: 800px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            transform: scale(0.9); /* Reduz o tamanho do container */
+            transform-origin: top center;
+        }
+
+        .board {
+            margin: 10px auto;
+        }
+    }
+</style>
 </head>
 <body>
     <p>Desenvolvedor: Mattheus Camargo</p>
