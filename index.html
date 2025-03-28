@@ -173,23 +173,23 @@
 
         .board {
             display: grid;
-            grid-template-columns: repeat(3, 120px);
-            gap: 10px;
+            grid-template-columns: repeat(3, minmax(60px, 1fr));
+            gap: 5px;
             background: #444;
-            padding: 15px;
+            padding: 10px;
             border-radius: 15px;
             box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
             margin-bottom: 20px;
         }
 
         .cell {
-            width: 120px;
-            height: 120px;
+            width: 100%;
+            aspect-ratio: 1; /* Garante que as células sejam quadradas */
             background: #eee;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 60px;
+            font-size: calc(10px + 4vw); /* Tamanho da fonte ajustável */
             cursor: pointer;
             border-radius: 10px;
             transition: background-color 0.3s ease;
@@ -217,6 +217,7 @@
             transition: background-color 0.3s ease;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             display: none;
+            font-size: calc(10px + 1.5vw); /* Ajusta o tamanho do botão dinamicamente */
         }
 
         .restart-button:hover {
@@ -257,6 +258,9 @@
             font-weight: bold;
             text-align: center;
             z-index: 1000;
+            width: 90%;
+            font-size: calc(14px + 2vw); /* Ajusta o tamanho da fonte dinamicamente */
+            padding: 15px;
         }
 
         .winner-alert span {
@@ -274,6 +278,7 @@
             cursor: pointer;
             font-size: 16px;
             transition: background-color 0.3s ease;
+            font-size: calc(12px + 1vw); /* Ajusta o tamanho do botão dinamicamente */
         }
 
         .winner-alert button:hover {
@@ -282,6 +287,7 @@
 
         .scores div {
             transition: color 0.3s, font-weight 0.3s;
+            font-size: calc(12px + 1vw); /* Ajusta o tamanho da fonte dinamicamente */
         }
 
         .scores div.winning {
@@ -366,12 +372,14 @@
         .record-display h4 {
             color: #ffd700;
             margin: 0 0 10px 0;
+            font-size: calc(12px + 1vw); /* Ajusta o tamanho do título dinamicamente */
         }
 
         #record-holder {
             font-weight: bold;
             color: #007bff;
             margin-bottom: 5px;
+            font-size: calc(10px + 0.8vw); /* Ajusta o tamanho do texto dinamicamente */
         }
 
         .champion-player {
@@ -383,6 +391,25 @@
         .champion-player::after {
             content: '👑';
             margin-left: 5px;
+        }
+
+        /* Ajustes para telas muito pequenas */
+        @media screen and (max-width: 320px) {
+            .board {
+                gap: 3px;
+            }
+
+            .cell {
+                font-size: calc(8px + 3vw);
+            }
+
+            .scores {
+                font-size: calc(10px + 1vw);
+            }
+
+            .restart-button {
+                font-size: calc(8px + 1.2vw);
+            }
         }
     </style>
 </head>
