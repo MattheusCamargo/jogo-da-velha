@@ -68,9 +68,24 @@
             color: #0056b3;
         }
 
+        .edit-icon.inactive {
+            opacity: 0.5; /* Ofusca o ícone */
+            pointer-events: none; /* Desativa cliques */
+        }
+
         @media (min-width: 768px) {
             .board {
-                max-width: 300px; /* Reduz o tamanho da matriz para tablets e desktops */
+                max-width: 360px; /* Aumentado em 20% para desktops */
+            }
+
+            .cell {
+                font-size: calc(1.8rem + 2vw); /* Ajusta o tamanho proporcional */
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .board {
+                max-width: 300px; /* Aumentado em 20% para desktops maiores */
             }
 
             .cell {
@@ -78,20 +93,21 @@
             }
         }
 
-        @media (min-width: 1024px) {
-            .board {
-                max-width: 250px; /* Reduz ainda mais o tamanho da matriz para desktops maiores */
-            }
-
-            .cell {
-                font-size: calc(1.2rem + 1vw); /* Ajusta o tamanho proporcional */
-            }
+        #player-choice .btn:hover {
+            background-color: #007bff; /* Azul */
+            color: white; /* Texto branco */
+            transition: background-color 0.3s ease; /* Suaviza a transição */
         }
     </style>
 </head>
 <body class="bg-light text-center">
     <div class="container py-4">
-        <p class="text-muted">Desenvolvedor: Mattheus Camargo</p>
+        <p class="text-muted">
+            Desenvolvedor: Mattheus Camargo 
+            <a href="https://www.linkedin.com/in/mattheuscamargo/" target="_blank" title="LinkedIn">
+                <i class="bi bi-linkedin" style="font-size: 1.2rem; color: #0077b5;"></i>
+            </a>
+        </p>
         <p class="text-muted">Tecnologia empregada: JavaScript</p>
         <div class="card shadow-sm">
             <div class="card-body">
@@ -118,13 +134,17 @@
                         </div>
                     </div>
                     <div class="player-names-edit mt-3" style="display: none;">
-                        <label for="playerXName">Jogador ❌:</label>
-                        <input type="text" id="playerXName" class="form-control mb-2" placeholder="Nome do Jogador ❌">
-                        <label for="playerOName">Jogador ⭕:</label>
-                        <input type="text" id="playerOName" class="form-control mb-2" placeholder="Nome do Jogador ⭕">
+                        <label for="playerXName" id="labelPlayerXName" style="display: none;">Jogador ❌:</label>
+                        <input type="text" id="playerXName" class="form-control mb-2" placeholder="Nome do Jogador ❌" style="display: none;">
+                        <label for="playerOName" id="labelPlayerOName" style="display: none;">Jogador ⭕:</label>
+                        <input type="text" id="playerOName" class="form-control mb-2" placeholder="Nome do Jogador ⭕" style="display: none;">
                         <button id="saveNames" class="btn btn-primary">Salvar Nomes</button>
                     </div>
-                    <p class="text-muted"><b>IMPORTANTE:</b> O X sempre começa</p>
+                    <div class="record-display mt-3">
+                        <h4>🏆 Recordista</h4>
+                        <div id="record-holder" class="text-primary">Nenhum recordista ainda</div>
+                        <div id="record-score" class="text-secondary">Recorde: 0</div>
+                    </div>
                 </div>
                 <div class="board mx-auto" style="display: none;">
                     <div class="cell" onclick="makeMove(0)"></div>
@@ -137,6 +157,7 @@
                     <div class="cell" onclick="makeMove(7)"></div>
                     <div class="cell" onclick="makeMove(8)"></div>
                 </div>
+                <p id="important-warning" class="text-muted mt-3" style="display: none;"><b>IMPORTANTE:</b> O X sempre começa</p>
                 <div class="d-flex justify-content-center mt-4">
                     <button id="restart-game" class="btn btn-success me-2" style="display: none;">🔄 Reiniciar Jogo</button>
                     <button id="change-mode" class="btn btn-warning" style="display: none;">↩️ Alterar Modo</button>
@@ -155,6 +176,10 @@
         let currentPlayer = 'x';
         let gameBoard = ['', '', '', '', '', '', '', '', ''];
         let scores = { x: 0, o: 0 };
+        let recordHolder = {
+            name: '',
+            score: 0
+        };
 
         document.querySelector('.board').style.display = 'none';
         document.querySelector('.scores').style.display = 'none';
@@ -180,6 +205,7 @@
             isSinglePlayer = true;
             humanPlayer = 'x';
             computerPlayer = 'o';
+            updateEditIcons();
             startGame();
         });
 
@@ -187,6 +213,7 @@
             isSinglePlayer = true;
             humanPlayer = 'o';
             computerPlayer = 'x';
+            updateEditIcons();
             startGame();
             setTimeout(() => {
                 computerMove();
@@ -210,6 +237,7 @@
             document.querySelector('.scores').style.display = 'none';
             document.getElementById('restart-game').style.display = 'none';
             document.getElementById('change-mode').style.display = 'none';
+            document.getElementById('important-warning').style.display = 'none'; // Oculta o aviso "IMPORTANTE"
 
             // Mostrar seleção de modo
             document.querySelector('h3').style.display = 'block';
@@ -225,6 +253,7 @@
             resetGame();
             document.querySelector('.board').style.display = 'grid';
             document.querySelector('.scores').style.display = 'block';
+            document.getElementById('important-warning').style.display = 'block'; // Garante que o aviso "IMPORTANTE" está visível
 
             // Verifica se é modo de um jogador e o humano escolheu "O"
             if (isSinglePlayer && humanPlayer === 'o') {
@@ -241,6 +270,7 @@
             document.querySelector('.scores').style.display = 'block';
             document.getElementById('restart-game').style.display = 'inline-block';
             document.getElementById('change-mode').style.display = 'inline-block';
+            document.getElementById('important-warning').style.display = 'block'; // Exibe o aviso "IMPORTANTE"
             resetGame();
         }
 
@@ -343,6 +373,22 @@
         function updateScore(player) {
             scores[player]++;
             document.getElementById(`score${player.toUpperCase()}`).textContent = scores[player];
+            checkAndUpdateRecord(player);
+        }
+
+        function checkAndUpdateRecord(player) {
+            const playerName = player === 'x' ? document.getElementById('displayPlayerX').textContent : document.getElementById('displayPlayerO').textContent;
+            const currentScore = scores[player];
+
+            if (currentScore > recordHolder.score) {
+                recordHolder = {
+                    name: playerName,
+                    score: currentScore
+                };
+
+                document.getElementById('record-holder').textContent = recordHolder.name;
+                document.getElementById('record-score').textContent = `Recorde: ${recordHolder.score}`;
+            }
         }
 
         function computerMove() {
@@ -360,25 +406,57 @@
             document.querySelectorAll('.cell')[movePosition].textContent = computerPlayer.toUpperCase();
         }
 
-        // Reimplementação da funcionalidade de edição de nomes
+        // Reimplementação da funcionalidade de edição de nomes com restrição baseada na peça escolhida
         const editIcons = document.querySelectorAll('.edit-icon');
         const playerNamesEditDiv = document.querySelector('.player-names-edit');
         const saveNamesButton = document.getElementById('saveNames');
+        const labelPlayerXName = document.getElementById('labelPlayerXName');
+        const labelPlayerOName = document.getElementById('labelPlayerOName');
+
+        // Atualiza o estado dos ícones de edição
+        function updateEditIcons() {
+            editIcons.forEach(icon => {
+                const player = icon.getAttribute('data-player');
+                if ((player === 'x' && humanPlayer !== 'x') || (player === 'o' && humanPlayer !== 'o')) {
+                    icon.classList.add('inactive'); // Ofusca o ícone se o jogador não puder editar
+                } else {
+                    icon.classList.remove('inactive'); // Ativa o ícone para o jogador atual
+                }
+            });
+        }
 
         editIcons.forEach(icon => {
-            icon.addEventListener('click', () => {
-                playerNamesEditDiv.style.display = 'block';
-                document.getElementById('playerXName').value = document.getElementById('displayPlayerX').textContent.trim();
-                document.getElementById('playerOName').value = document.getElementById('displayPlayerO').textContent.trim();
+            icon.addEventListener('click', (event) => {
+                const player = event.target.getAttribute('data-player');
+                if ((player === 'x' && humanPlayer === 'x') || (player === 'o' && humanPlayer === 'o')) {
+                    playerNamesEditDiv.style.display = 'block';
+
+                    // Exibe apenas o campo de edição correspondente à peça escolhida
+                    if (humanPlayer === 'x') {
+                        labelPlayerXName.style.display = 'block';
+                        document.getElementById('playerXName').style.display = 'block';
+                        labelPlayerOName.style.display = 'none';
+                        document.getElementById('playerOName').style.display = 'none';
+                        document.getElementById('playerXName').value = document.getElementById('displayPlayerX').textContent.trim();
+                    } else if (humanPlayer === 'o') {
+                        labelPlayerOName.style.display = 'block';
+                        document.getElementById('playerOName').style.display = 'block';
+                        labelPlayerXName.style.display = 'none';
+                        document.getElementById('playerXName').style.display = 'none';
+                        document.getElementById('playerOName').value = document.getElementById('displayPlayerO').textContent.trim();
+                    }
+                }
             });
         });
 
         saveNamesButton.addEventListener('click', () => {
-            const playerXName = document.getElementById('playerXName').value || "Player ❌";
-            const playerOName = document.getElementById('playerOName').value || "Player ⭕";
-
-            document.getElementById('displayPlayerX').textContent = playerXName;
-            document.getElementById('displayPlayerO').textContent = playerOName;
+            if (humanPlayer === 'x') {
+                const playerXName = document.getElementById('playerXName').value || "Player ❌";
+                document.getElementById('displayPlayerX').textContent = playerXName;
+            } else if (humanPlayer === 'o') {
+                const playerOName = document.getElementById('playerOName').value || "Player ⭕";
+                document.getElementById('displayPlayerO').textContent = playerOName;
+            }
 
             playerNamesEditDiv.style.display = 'none';
         });
