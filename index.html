@@ -791,7 +791,14 @@
         gameBoard = ['', '', '', '', '', '', '', '', ''];
         currentPlayer = 'x';
         updateDisplayNames();
-        // Removidas as linhas que zeravam o placar
+
+        // Verifica se é modo de um jogador e o humano escolheu "O"
+        if (isSinglePlayer && humanPlayer === 'o') {
+            setTimeout(() => {
+                computerMove(); // Computador faz a primeira jogada
+                currentPlayer = humanPlayer; // Define o próximo jogador como humano
+            }, 500);
+        }
     });
 
     function updateScore(player, value) {
@@ -817,3 +824,5 @@
     }
 
     </script>
+</body>
+</html>
