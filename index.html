@@ -4,192 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>Jogo da Velha - Mattheus Camargo Dev</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Adicionei o Bootstrap Icons para os ícones -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-
-        /* Adicione estas media queries dentro da tag <style> */
-
-/* Estilos para dispositivos móveis */
-@media screen and (max-width: 768px) {
-    .container {
-        padding: 15px;
-        width: 90%;
-        margin: 10px auto;
-    }
-
-    .board {
-        grid-template-columns: repeat(3, 90px);
-        gap: 5px;
-        padding: 10px;
-    }
-
-    .cell {
-        width: 90px;
-        height: 90px;
-        font-size: 40px;
-    }
-
-    .scores {
-        font-size: 18px;
-    }
-
-    .player-names-edit {
-        padding: 10px;
-    }
-
-    .player-names-edit input {
-        padding: 8px;
-        font-size: 14px;
-        width: 90%;
-        margin: 5px auto;
-    }
-
-    .saveNames {
-        padding: 10px 20px;
-        font-size: 14px;
-        width: 90%;
-        margin: 10px auto;
-    }
-
-    .mode-button, .piece-button {
-        padding: 8px 16px;
-        font-size: 14px;
-        width: 90%;
-        margin: 5px auto;
-        display: block;
-    }
-
-    .restart-button {
-        padding: 10px 20px;
-        font-size: 16px;
-        width: 45%;
-    }
-
-    .restart-button-container {
-        flex-wrap: wrap;
-    }
-
-    .winner-alert {
-        width: 80%;
-        font-size: 18px;
-        padding: 15px;
-    }
-
-    .winner-alert button {
-        padding: 8px 16px;
-        font-size: 14px;
-    }
-
-    .record-display {
-        padding: 10px;
-        margin: 10px 0;
-    }
-
-    .record-display h4 {
-        font-size: 16px;
-    }
-
-    #record-holder, #record-score {
-        font-size: 14px;
-    }
-
-    .player-names-display {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-    }
-
-    .edit-icon {
-        font-size: 14px;
-    }
-}
-
-/* Ajustes para telas muito pequenas */
-@media screen and (max-width: 320px) {
-    .board {
-        grid-template-columns: repeat(3, 70px);
-    }
-
-    .cell {
-        width: 70px;
-        height: 70px;
-        font-size: 30px;
-    }
-
-    .scores {
-        font-size: 16px;
-    }
-
-    .restart-button {
-        padding: 8px 16px;
-        font-size: 14px;
-    }
-}
-
-/* Ajuste para orientação paisagem em dispositivos móveis */
-@media screen and (max-height: 500px) {
-    body {
-        padding: 10px;
-    }
-
-    .container {
-        transform: scale(0.8);
-        transform-origin: top center;
-    }
-
-    .board {
-        margin: 10px auto;
-    }
-}
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(to bottom right, #e0eafc, #cfdef3);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            color: #333;
-        }
-
-      .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-            text-align: center;
-        }
-
-      .scores {
-            margin-bottom: 20px;
-            font-size: 24px;
-            text-align: center;
-        }
-
-        .scores h3 {
-            color: #555;
-        }
-
         .board {
             display: grid;
-            grid-template-columns: repeat(3, minmax(60px, 1fr));
-            gap: 5px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
             background: #444;
             padding: 10px;
             border-radius: 15px;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
             margin-bottom: 20px;
+            max-width: 400px; /* Limita o tamanho máximo da matriz */
+            margin: 0 auto; /* Centraliza a matriz horizontalmente */
         }
 
         .cell {
             width: 100%;
-            aspect-ratio: 1; /* Garante que as células sejam quadradas */
+            aspect-ratio: 1;
             background: #eee;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: calc(10px + 4vw); /* Tamanho da fonte ajustável */
+            font-size: calc(1.8rem + 2vw); /* Ajuste proporcional ao tamanho do quadrante */
             cursor: pointer;
             border-radius: 10px;
             transition: background-color 0.3s ease;
@@ -197,52 +36,6 @@
 
         .cell:hover {
             background-color: #ddd;
-        }
-
-        .restart-button-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px;  /* Espaçamento entre os botões */
-            margin-top: 20px;
-        }
-
-        .restart-button {
-            padding: 15px 30px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 18px;
-            transition: background-color 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            display: none;
-            font-size: calc(10px + 1.5vw); /* Ajusta o tamanho do botão dinamicamente */
-        }
-
-        .restart-button:hover {
-            background-color: #0056b3;
-        }
-
-        .aviso {
-            font-size: 12px;
-            color: #888;
-            margin-top: 10px;
-        }
-
-        .developer-info {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #666;
-        }
-
-        .developer-info p {
-            margin: 5px 0;
-        }
-
-        p {
-            margin: 5px;
-            align-content: first baseline;
         }
 
         .winner-alert {
@@ -254,347 +47,114 @@
             color: white;
             padding: 20px;
             border-radius: 10px;
-            font-size: 24px;
+            font-size: 1.5rem;
             font-weight: bold;
             text-align: center;
             z-index: 1000;
-            width: 90%;
-            font-size: calc(14px + 2vw); /* Ajusta o tamanho da fonte dinamicamente */
-            padding: 15px;
         }
 
         .winner-alert span {
             color: #0f0;
-            font-family: 'Courier New', monospace;
         }
 
-        .winner-alert button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin-top: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-            font-size: calc(12px + 1vw); /* Ajusta o tamanho do botão dinamicamente */
-        }
-
-        .winner-alert button:hover {
-            background-color: #0056b3;
-        }
-
-        .scores div {
-            transition: color 0.3s, font-weight 0.3s;
-            font-size: calc(12px + 1vw); /* Ajusta o tamanho da fonte dinamicamente */
-        }
-
-        .scores div.winning {
-            color: green;
-            font-weight: bold;
-            font-size: 26px;
-        }
         .edit-icon {
-          cursor: pointer;
-          margin-left: 5px;
-          font-size: 0.8em; /* Ajuste o tamanho do ícone se necessário */
-        }
-
-        .player-names-edit {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-          margin-bottom: 20px;
-        }
-
-        .player-names-edit input {
-              padding: 8px;
-              border: 1px solid #ccc;
-              border-radius: 5px;
-              font-size: 16px;
-        }
-        .player-names-display{
-            margin-bottom: 12px;
-        }
-         .scores div b{
-          margin: 3px;
-        }
-
-        .saveNames {
-            padding: 15px 30px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .saveNames:hover {
-            background-color: #0056b3;
-        }
-        .game-mode-selection {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .mode-button, .piece-button {
-            padding: 10px 20px;
-            margin: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-
-        .mode-button:hover, .piece-button:hover {
-            background-color: #0056b3;
-        }
-
-        #player-choice {
-            margin-top: 20px;
-        }
-
-        .record-display {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .record-display h4 {
-            color: #ffd700;
-            margin: 0 0 10px 0;
-            font-size: calc(12px + 1vw); /* Ajusta o tamanho do título dinamicamente */
-        }
-
-        #record-holder {
-            font-weight: bold;
-            color: #007bff;
-            margin-bottom: 5px;
-            font-size: calc(10px + 0.8vw); /* Ajusta o tamanho do texto dinamicamente */
-        }
-
-        .champion-player {
-            color: #ffd700;
-            font-weight: bold;
-            position: relative;
-        }
-
-        .champion-player::after {
-            content: '👑';
+            font-size: 1rem;
             margin-left: 5px;
+            color: #007bff;
         }
 
-        /* Ajustes para telas muito pequenas */
-        @media screen and (max-width: 320px) {
+        .edit-icon:hover {
+            color: #0056b3;
+        }
+
+        @media (min-width: 768px) {
             .board {
-                gap: 3px;
+                max-width: 300px; /* Reduz o tamanho da matriz para tablets e desktops */
             }
 
             .cell {
-                font-size: calc(8px + 3vw);
-            }
-
-            .scores {
-                font-size: calc(10px + 1vw);
-            }
-
-            .restart-button {
-                font-size: calc(8px + 1.2vw);
+                font-size: calc(1.5rem + 1.5vw); /* Ajusta o tamanho proporcional */
             }
         }
 
-    /* Ajuste dinâmico para o tabuleiro e células */
-    .board {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 5px;
-        background: #444;
-        padding: 10px;
-        border-radius: 15px;
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-        margin-bottom: 20px;
-        width: 90vw; /* Ajusta a largura do tabuleiro para caber na tela */
-        max-width: 400px; /* Limita o tamanho máximo */
-        height: auto; /* Permite que a altura seja proporcional */
-    }
+        @media (min-width: 1024px) {
+            .board {
+                max-width: 250px; /* Reduz ainda mais o tamanho da matriz para desktops maiores */
+            }
 
-    @media screen and (max-width: 360px) {
-        .board {
-            gap: 3px;
-            width: 95vw; /* Ajusta a largura para telas menores */
+            .cell {
+                font-size: calc(1.2rem + 1vw); /* Ajusta o tamanho proporcional */
+            }
         }
-    }
-
-    @media screen and (max-height: 800px) {
-        .board {
-            margin: 10px auto;
-            transform: scale(0.9); /* Reduz o tamanho proporcionalmente */
-            transform-origin: top center;
-        }
-    }
-
-    .cell {
-        width: 100%;
-        aspect-ratio: 1; /* Garante que as células sejam quadradas */
-        background: #eee;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: calc(10px + 4vw); /* Tamanho da fonte ajustável */
-        cursor: pointer;
-        border-radius: 10px;
-        transition: background-color 0.3s ease;
-    }
-
-    .cell:hover {
-        background-color: #ddd;
-    }
-
-    .container {
-        width: 95vw; /* Ajusta a largura do container para caber na tela */
-        max-width: 450px; /* Limita o tamanho máximo */
-        margin: 0 auto; /* Centraliza o container */
-    }
-
-    .scores {
-        font-size: calc(12px + 1vw); /* Ajusta o tamanho da fonte dinamicamente */
-        text-align: center;
-    }
-
-    .winner-alert {
-        width: 90%;
-        font-size: calc(14px + 2vw); /* Ajusta o tamanho da fonte dinamicamente */
-        padding: 15px;
-    }
-
-    .winner-alert button {
-        font-size: calc(12px + 1vw); /* Ajusta o tamanho do botão dinamicamente */
-    }
-
-    .restart-button {
-        font-size: calc(10px + 1.5vw); /* Ajusta o tamanho do botão dinamicamente */
-    }
-
-    .record-display h4 {
-        font-size: calc(12px + 1vw); /* Ajusta o tamanho do título dinamicamente */
-    }
-
-    #record-holder, #record-score {
-        font-size: calc(10px + 0.8vw); /* Ajusta o tamanho do texto dinamicamente */
-    }
-
-    /* Ajustes para telas muito pequenas */
-    @media screen and (max-width: 360px) {
-        .board {
-            gap: 3px;
-        }
-
-        .cell {
-            font-size: calc(8px + 3vw);
-        }
-
-        .scores {
-            font-size: calc(10px + 1vw);
-        }
-
-        .restart-button {
-            font-size: calc(8px + 1.2vw);
-        }
-    }
-
-    /* Ajuste para telas verticais */
-    @media screen and (max-height: 800px) {
-        body {
-            padding: 10px;
-        }
-
-        .container {
-            transform: scale(0.9); /* Reduz o tamanho do container */
-            transform-origin: top center;
-        }
-
-        .board {
-            margin: 10px auto;
-        }
-    }
-</style>
+    </style>
 </head>
-<body>
-    <p>Desenvolvedor: Mattheus Camargo</p>
-    <p>Tecnologia empregada: JavaScript</p>
-    <div class="container">
-        <div class="game-mode-selection">
-            <h3>Escolha o modo de jogo:</h3>
-            <button id="two-players" class="mode-button">Dois Jogadores</button>
-            <button id="single-player" class="mode-button">Jogar contra computador</button>
-            
-            <div id="player-choice" style="display: none;">
-                <h4>Escolha sua peça:</h4>
-                <button id="choose-x" class="piece-button">Jogar com ❌</button>
-                <button id="choose-o" class="piece-button">Jogar com ⭕</button>
+<body class="bg-light text-center">
+    <div class="container py-4">
+        <p class="text-muted">Desenvolvedor: Mattheus Camargo</p>
+        <p class="text-muted">Tecnologia empregada: JavaScript</p>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="mb-4">
+                    <h3>Escolha o modo de jogo:</h3>
+                    <button id="two-players" class="btn btn-primary me-2">Dois Jogadores</button>
+                    <button id="single-player" class="btn btn-primary">Jogar contra computador</button>
+                </div>
+                <div id="player-choice" class="mb-4" style="display: none;">
+                    <h4>Escolha sua peça:</h4>
+                    <button id="choose-x" class="btn btn-secondary me-2">Jogar com ❌</button>
+                    <button id="choose-o" class="btn btn-secondary">Jogar com ⭕</button>
+                </div>
+                <div class="scores mb-4" style="display: none;">
+                    <h3>O jogo começou!</h3>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <b id="displayPlayerX">Player ❌</b>: <span id="scoreX">0</span>
+                            <i class="edit-icon bi bi-pencil" data-player="x" title="Editar nome"></i>
+                        </div>
+                        <div>
+                            <b id="displayPlayerO">Player ⭕</b>: <span id="scoreO">0</span>
+                            <i class="edit-icon bi bi-pencil" data-player="o" title="Editar nome"></i>
+                        </div>
+                    </div>
+                    <div class="player-names-edit mt-3" style="display: none;">
+                        <label for="playerXName">Jogador ❌:</label>
+                        <input type="text" id="playerXName" class="form-control mb-2" placeholder="Nome do Jogador ❌">
+                        <label for="playerOName">Jogador ⭕:</label>
+                        <input type="text" id="playerOName" class="form-control mb-2" placeholder="Nome do Jogador ⭕">
+                        <button id="saveNames" class="btn btn-primary">Salvar Nomes</button>
+                    </div>
+                    <p class="text-muted"><b>IMPORTANTE:</b> O X sempre começa</p>
+                </div>
+                <div class="board mx-auto" style="display: none;">
+                    <div class="cell" onclick="makeMove(0)"></div>
+                    <div class="cell" onclick="makeMove(1)"></div>
+                    <div class="cell" onclick="makeMove(2)"></div>
+                    <div class="cell" onclick="makeMove(3)"></div>
+                    <div class="cell" onclick="makeMove(4)"></div>
+                    <div class="cell" onclick="makeMove(5)"></div>
+                    <div class="cell" onclick="makeMove(6)"></div>
+                    <div class="cell" onclick="makeMove(7)"></div>
+                    <div class="cell" onclick="makeMove(8)"></div>
+                </div>
+                <div class="d-flex justify-content-center mt-4">
+                    <button id="restart-game" class="btn btn-success me-2" style="display: none;">🔄 Reiniciar Jogo</button>
+                    <button id="change-mode" class="btn btn-warning" style="display: none;">↩️ Alterar Modo</button>
+                </div>
             </div>
         </div>
-
-        <div class="scores">
-            <h3>O jogo começou!</h3>
-            <div class="player-names-display">
-                <div><b id="displayPlayerX">Player ❌</b>: <span id="scoreX">0</span> <span class="edit-icon" data-player="x">&#9998;</span></div>  <div><b id="displayPlayerO">Player ⭕</b>: <span id="scoreO">0</span> <span class="edit-icon" data-player="o">&#9998;</span></div>
-            </div>
-
-            <div class="player-names-edit" style="display: none;">  <label for="playerXName">Jogador ❌:</label>
-                  <input type="text" id="playerXName" placeholder="Nome do Jogador ❌">
-                  <label for="playerOName">Jogador ⭕:</label>
-                  <input type="text" id="playerOName" placeholder="Nome do Jogador ⭕">
-                  <button id="saveNames" class="saveNames">Salvar Nomes</button>
-            </div>
-
-            <p class="aviso"><b>IMPORTANTE: </b>O X sempre começa</p>
-
-            <div class="record-display">
-                <h4>🏆 Recordista</h4>
-                <div id="record-holder">Nenhum recordista ainda</div>
-                <div id="record-score">Recorde: 0</div>
-            </div>
-        </div>
-
-        <div class="board">
-            <div class="cell" onclick="makeMove(0)"></div>
-            <div class="cell" onclick="makeMove(1)"></div>
-            <div class="cell" onclick="makeMove(2)"></div>
-            <div class="cell" onclick="makeMove(3)"></div>
-            <div class="cell" onclick="makeMove(4)"></div>
-            <div class="cell" onclick="makeMove(5)"></div>
-            <div class="cell" onclick="makeMove(6)"></div>
-            <div class="cell" onclick="makeMove(7)"></div>
-            <div class="cell" onclick="makeMove(8)"></div>
-        </div>
-
-        <div class="restart-button-container">
-            <button id="restart-game" class="restart-button">🔄 Reiniciar Jogo</button>
-            <button id="change-mode" class="restart-button">↩️ Alterar Modo</button>
-        </div>
+        <p class="text-muted mt-3">Versão 2.0</p>
     </div>
-    <p>Versão 2.0</p>
 
-
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-
         let isSinglePlayer = false;
         let computerPlayer = '';
         let humanPlayer = '';
-        let recordHolder = {
-            name: '',
-            score: 0
-        };
+        let currentPlayer = 'x';
+        let gameBoard = ['', '', '', '', '', '', '', '', ''];
+        let scores = { x: 0, o: 0 };
 
         document.querySelector('.board').style.display = 'none';
         document.querySelector('.scores').style.display = 'none';
@@ -603,17 +163,17 @@
 
         // Event listeners para seleção de modo
         document.getElementById('two-players').addEventListener('click', () => {
-        isSinglePlayer = false;
-        startGame();
+            isSinglePlayer = false;
+            startGame();
         });
 
         document.getElementById('single-player').addEventListener('click', () => {
-            document.querySelector('.game-mode-selection h3').style.display = 'none';
+            document.querySelector('h3').style.display = 'none';
             document.getElementById('two-players').style.display = 'none';
             document.getElementById('single-player').style.display = 'none';
             document.getElementById('player-choice').style.display = 'block';
             document.getElementById('restart-game').style.display = 'none';
-            document.getElementById('change-mode').style.display = 'none'; // Garante que o botão está oculto
+            document.getElementById('change-mode').style.display = 'none';
         });
 
         document.getElementById('choose-x').addEventListener('click', () => {
@@ -628,343 +188,200 @@
             humanPlayer = 'o';
             computerPlayer = 'x';
             startGame();
-            // Como o jogador escolheu O e X sempre começa, fazemos a primeira jogada do computador
             setTimeout(() => {
                 computerMove();
                 currentPlayer = humanPlayer;
             }, 500);
         });
 
-        // Função para verificar e atualizar o recorde
-        function checkAndUpdateRecord(player) {
-            // Se for o computador, não atualiza o recorde
-            if (isSinglePlayer && player === computerPlayer) {
-                return;
-            }
-
-            const playerName = player === 'x' ? 
-                document.getElementById('playerXName').value || "Player X" : 
-                document.getElementById('playerOName').value || "Player O";
-    
-            const currentScore = scores[player];
-
-            if (currentScore > recordHolder.score) {
-                recordHolder = {
-                    name: playerName,
-                    score: currentScore
-                };
-        
-                // Atualiza a exibição do recorde
-                document.getElementById('record-holder').textContent = `${playerName}`;
-                document.getElementById('record-score').textContent = `Recorde: ${currentScore}`;
-        
-                // Adiciona classe de campeão ao jogador atual
-                updateChampionStyle();
-            }
-        }
-
-        // Função para atualizar o estilo do campeão
-        function updateChampionStyle() {
-            // Remove a classe champion-player de todos os displays de nome
-            document.getElementById('displayPlayerX').classList.remove('champion-player');
-            document.getElementById('displayPlayerO').classList.remove('champion-player');
-    
-            // Adiciona a classe ao recordista atual
-            const playerXName = document.getElementById('playerXName').value || "Player X";
-            const playerOName = document.getElementById('playerOName').value || "Player O";
-    
-            if (recordHolder.name === playerXName) {
-                document.getElementById('displayPlayerX').classList.add('champion-player');
-            } else if (recordHolder.name === playerOName) {
-                document.getElementById('displayPlayerO').classList.add('champion-player');
-            }
-        }
-
-        function startGame() {
-            document.querySelector('.game-mode-selection').style.display = 'none';
-            document.querySelector('.board').style.display = 'grid';
-            document.querySelector('.scores').style.display = 'block';
-            document.getElementById('restart-game').style.display = 'inline-block';
-            document.getElementById('change-mode').style.display = 'inline-block'; // Mostra o botão de alterar modo
-            resetGame();
-        }
-
-        // Modifique os event listeners do modo de jogo
-        document.getElementById('single-player').addEventListener('click', () => {
-            document.querySelector('.game-mode-selection h3').style.display = 'none';
-            document.getElementById('two-players').style.display = 'none';
-            document.getElementById('single-player').style.display = 'none';
-            document.getElementById('player-choice').style.display = 'block';
-            document.getElementById('restart-game').style.display = 'none'; // Garante que o botão está oculto
-        });
-
-        // Adicione o event listener para o botão de alterar modo
-        document.getElementById('change-mode').addEventListener('click', function() {
+        document.getElementById('change-mode').addEventListener('click', function () {
             // Resetar variáveis importantes
             isSinglePlayer = false;
             computerPlayer = '';
             humanPlayer = '';
             scores = { x: 0, o: 0 };
-    
+
             // Atualizar placar
             document.getElementById('scoreX').textContent = '0';
             document.getElementById('scoreO').textContent = '0';
-    
+
             // Ocultar elementos do jogo
             document.querySelector('.board').style.display = 'none';
             document.querySelector('.scores').style.display = 'none';
             document.getElementById('restart-game').style.display = 'none';
             document.getElementById('change-mode').style.display = 'none';
-            
-            // Resetar o recorde
-            recordHolder = {
-                name: '',
-                score: 0
-            };
-            document.getElementById('record-holder').textContent = 'Nenhum recordista ainda';
-            document.getElementById('record-score').textContent = 'Recorde: 0';
-    
-            // Remove a classe champion-player de todos os displays de nome
-            document.getElementById('displayPlayerX').classList.remove('champion-player');
-            document.getElementById('displayPlayerO').classList.remove('champion-player');
 
             // Mostrar seleção de modo
-            document.querySelector('.game-mode-selection').style.display = 'block';
-            document.querySelector('.game-mode-selection h3').style.display = 'block';
+            document.querySelector('h3').style.display = 'block';
             document.getElementById('two-players').style.display = 'inline-block';
             document.getElementById('single-player').style.display = 'inline-block';
             document.getElementById('player-choice').style.display = 'none';
-    
+
             // Resetar o tabuleiro
             resetGame();
         });
 
-        // Função para jogada do computador
-            function computerMove() {
-                if (!isSinglePlayer) return;
-    
-        // Lista de células vazias
-        const emptyCells = gameBoard.reduce((acc, cell, index) => {
-            if (cell === '') acc.push(index);
-            return acc;
-        }, []);
-    
-        if (emptyCells.length === 0) return;
-    
-        // Primeiro, verifica se pode vencer
-            for (let index of emptyCells) {
-                gameBoard[index] = computerPlayer;
-            if (checkWinner()?.winner === computerPlayer) {
-                squares[index].textContent = computerPlayer.toUpperCase();
-            return;
-        }
-        gameBoard[index] = ''; // desfaz a jogada de teste
-    }
-    
-    // Depois, verifica se precisa bloquear o jogador
-    for (let index of emptyCells) {
-        gameBoard[index] = humanPlayer;
-        if (checkWinner()?.winner === humanPlayer) {
-            gameBoard[index] = computerPlayer;
-            squares[index].textContent = computerPlayer.toUpperCase();
-            return;
-        }
-        gameBoard[index] = ''; // desfaz a jogada de teste
-    }
-    
-    // Se não houver jogada crítica, tenta ocupar o centro
-    if (gameBoard[4] === '') {
-        gameBoard[4] = computerPlayer;
-        squares[4].textContent = computerPlayer.toUpperCase();
-        return;
-    }
-    
-    // Caso contrário, faz uma jogada aleatória
-    const randomIndex = Math.floor(Math.random() * emptyCells.length);
-    const movePosition = emptyCells[randomIndex];
-    
-    gameBoard[movePosition] = computerPlayer;
-    squares[movePosition].textContent = computerPlayer.toUpperCase();
-}
+        document.getElementById('restart-game').addEventListener('click', function () {
+            resetGame();
+            document.querySelector('.board').style.display = 'grid';
+            document.querySelector('.scores').style.display = 'block';
 
-        // Adicionar no início do script, junto com as outras variáveis
-        let scores = {
-            x: 0,
-            o: 0
-        };
+            // Verifica se é modo de um jogador e o humano escolheu "O"
+            if (isSinglePlayer && humanPlayer === 'o') {
+                setTimeout(() => {
+                    computerMove(); // Computador faz a primeira jogada
+                    currentPlayer = humanPlayer; // Define o próximo jogador como humano
+                }, 500);
+            }
+        });
 
-        const squares = document.querySelectorAll('.cell');
-        let currentPlayer = 'x';
-        let gameBoard = ['', '', '', '', '', '', '', '', ''];
+        function startGame() {
+            document.getElementById('player-choice').style.display = 'none';
+            document.querySelector('.board').style.display = 'grid';
+            document.querySelector('.scores').style.display = 'block';
+            document.getElementById('restart-game').style.display = 'inline-block';
+            document.getElementById('change-mode').style.display = 'inline-block';
+            resetGame();
+        }
+
+        function makeMove(index) {
+            if (gameBoard[index] || checkWinner()) {
+                return;
+            }
+
+            if (isSinglePlayer && currentPlayer !== humanPlayer) {
+                return;
+            }
+
+            gameBoard[index] = currentPlayer;
+            document.querySelectorAll('.cell')[index].textContent = currentPlayer.toUpperCase();
+
+            const result = checkWinner();
+            if (result) {
+                if (result.winner === 'draw') {
+                    showWinnerAlert('draw');
+                } else {
+                    showWinnerAlert(result.winner);
+                    highlightWinner(result.winningSquares);
+                    updateScore(result.winner);
+                }
+            } else {
+                currentPlayer = currentPlayer === 'x' ? 'o' : 'x';
+                if (isSinglePlayer && currentPlayer === computerPlayer) {
+                    setTimeout(() => {
+                        computerMove();
+                        const result = checkWinner();
+                        if (result) {
+                            if (result.winner === 'draw') {
+                                showWinnerAlert('draw');
+                            } else {
+                                showWinnerAlert(result.winner);
+                                highlightWinner(result.winningSquares);
+                                updateScore(result.winner);
+                            }
+                        } else {
+                            currentPlayer = humanPlayer;
+                        }
+                    }, 500);
+                }
+            }
+        }
+
+        function resetGame() {
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach(cell => {
+                cell.textContent = ''; // Limpa o conteúdo dos quadrantes
+                cell.style.backgroundColor = '#eee'; // Reseta a cor de fundo
+            });
+            gameBoard = ['', '', '', '', '', '', '', '', '']; // Reseta o estado do tabuleiro
+            currentPlayer = 'x'; // Define o jogador inicial como 'x'
+        }
+
+        function checkWinner() {
+            const winPatterns = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ];
+
+            for (const combination of winPatterns) {
+                const [a, b, c] = combination;
+                if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+                    return { winner: gameBoard[a], winningSquares: [a, b, c] };
+                }
+            }
+
+            if (gameBoard.every(cell => cell !== '')) {
+                return { winner: 'draw', winningSquares: [] };
+            }
+
+            return null;
+        }
+
+        function highlightWinner(winningSquares) {
+            winningSquares.forEach(index => {
+                document.querySelectorAll('.cell')[index].style.backgroundColor = 'yellow';
+            });
+        }
+
+        function showWinnerAlert(winner) {
+            const alertDiv = document.createElement('div');
+            alertDiv.classList.add('winner-alert');
+
+            let message = winner === 'draw' ? "Empate!" : `🎉 O vencedor é <span>${winner.toUpperCase()}</span>! 🥳`;
+            alertDiv.innerHTML = message;
+
+            const okButton = document.createElement('button');
+            okButton.textContent = 'OK';
+            okButton.classList.add('btn', 'btn-light', 'mt-3');
+            okButton.addEventListener('click', () => alertDiv.remove());
+            alertDiv.appendChild(okButton);
+
+            document.body.appendChild(alertDiv);
+        }
+
+        function updateScore(player) {
+            scores[player]++;
+            document.getElementById(`score${player.toUpperCase()}`).textContent = scores[player];
+        }
+
+        function computerMove() {
+            const emptyCells = gameBoard.reduce((acc, cell, index) => {
+                if (cell === '') acc.push(index);
+                return acc;
+            }, []);
+
+            if (emptyCells.length === 0) return;
+
+            const randomIndex = Math.floor(Math.random() * emptyCells.length);
+            const movePosition = emptyCells[randomIndex];
+
+            gameBoard[movePosition] = computerPlayer;
+            document.querySelectorAll('.cell')[movePosition].textContent = computerPlayer.toUpperCase();
+        }
+
+        // Reimplementação da funcionalidade de edição de nomes
         const editIcons = document.querySelectorAll('.edit-icon');
         const playerNamesEditDiv = document.querySelector('.player-names-edit');
         const saveNamesButton = document.getElementById('saveNames');
-        
-        let originalNames = {}; // Objeto para armazenar os nomes originais
-
-        function toggleEditMode() {
-            if (playerNamesEditDiv.style.display === 'none') {
-              // Modo de visualização -> Modo de edição
-                playerNamesEditDiv.style.display = 'flex';
-
-              // Armazena os nomes atuais antes de editar
-                originalNames.x = document.getElementById('playerXName').value;
-                originalNames.o = document.getElementById('playerOName').value;
-            }
-        }
 
         editIcons.forEach(icon => {
-            icon.addEventListener('click', toggleEditMode);
+            icon.addEventListener('click', () => {
+                playerNamesEditDiv.style.display = 'block';
+                document.getElementById('playerXName').value = document.getElementById('displayPlayerX').textContent.trim();
+                document.getElementById('playerOName').value = document.getElementById('displayPlayerO').textContent.trim();
+            });
         });
 
         saveNamesButton.addEventListener('click', () => {
-            updateDisplayNames();  //Atualiza nomes
-            playerNamesEditDiv.style.display = 'none'; // Oculta a edição
+            const playerXName = document.getElementById('playerXName').value || "Player ❌";
+            const playerOName = document.getElementById('playerOName').value || "Player ⭕";
+
+            document.getElementById('displayPlayerX').textContent = playerXName;
+            document.getElementById('displayPlayerO').textContent = playerOName;
+
+            playerNamesEditDiv.style.display = 'none';
         });
-
-        updateDisplayNames(); //Para setar inicialmente os nomes padrões
-        function updateDisplayNames() {
-            const playerXName = document.getElementById('playerXName').value || "Player X";
-            const playerOName = document.getElementById('playerOName').value || "Player O";
-            document.getElementById('displayPlayerX').textContent = `${playerXName} ❌`;
-            document.getElementById('displayPlayerO').textContent = `${playerOName} ⭕`;
-        }
-
-      function showWinnerAlert(winner) {
-        const alertDiv = document.createElement('div');
-        alertDiv.classList.add('winner-alert');
-
-        let message = "";
-        if (winner === 'draw') {
-            message = "Empate!";
-        } else {
-            const playerName = winner === 'x' ? document.getElementById('playerXName').value : document.getElementById('playerOName').value;
-            message = `🎉 O vencedor é <span>${playerName.toUpperCase()}</span>! 🥳`;
-        }
-
-        alertDiv.innerHTML = message;
-
-        const okButton = document.createElement('button');
-        okButton.textContent = 'OK';
-        okButton.addEventListener('click', () => {
-          alertDiv.remove();
-        });
-        alertDiv.appendChild(okButton);
-
-        document.body.appendChild(alertDiv);
-    }
-
-    function checkWinner() {
-        const winPatterns = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-            [0, 4, 8], [2, 4, 6]             // Diagonals
-        ];
-
-        for (const combination of winPatterns) {
-            const [a, b, c] = combination;
-            if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
-                return { winner: gameBoard[a], winningSquares: [squares[a], squares[b], squares[c]] };
-            }
-        }
-
-        if (gameBoard.every(cell => cell !== '')) {
-            return { winner: 'draw', winningSquares: [] };
-        }
-
-        return null; // No winner
-    }
-
-      function highlightWinner(winningSquares) {
-        winningSquares.forEach(square => {
-            square.style.backgroundColor = 'yellow';
-        });
-    }
-
-    function makeMove(index) {
-    if (gameBoard[index] || checkWinner()) {
-        return;
-    }
-
-    if (isSinglePlayer && currentPlayer !== humanPlayer) {
-        return; // Impede o jogador de fazer movimento quando é vez do computador
-    }
-
-    gameBoard[index] = currentPlayer;
-    squares[index].textContent = currentPlayer.toUpperCase();
-
-    const result = checkWinner();
-    if (result) {
-        if (result.winner === 'draw') {
-            showWinnerAlert('draw');
-        } else {
-            showWinnerAlert(result.winner);
-            highlightWinner(result.winningSquares);
-            updateScore(result.winner);
-        }
-    } else {
-        currentPlayer = currentPlayer === 'x' ? 'o' : 'x';
-        if (isSinglePlayer && currentPlayer === computerPlayer) {
-            setTimeout(() => {
-                computerMove();
-                const result = checkWinner();
-                if (result) {
-                    if (result.winner === 'draw') {
-                        showWinnerAlert('draw');
-                    } else {
-                        showWinnerAlert(result.winner);
-                        highlightWinner(result.winningSquares);
-                        updateScore(result.winner);
-                    }
-                } else {
-                    currentPlayer = humanPlayer;
-                }
-            }, 500);
-        }
-    }
-}
-    document.getElementById('restart-game').addEventListener('click', function() {
-        // Limpa o tabuleiro visual
-        const cells = document.querySelectorAll('.cell');
-        cells.forEach(cell => {
-            cell.textContent = '';
-            cell.style.backgroundColor = '#eee';
-        });
-        gameBoard = ['', '', '', '', '', '', '', '', ''];
-        currentPlayer = 'x';
-        updateDisplayNames();
-
-        // Verifica se é modo de um jogador e o humano escolheu "O"
-        if (isSinglePlayer && humanPlayer === 'o') {
-            setTimeout(() => {
-                computerMove(); // Computador faz a primeira jogada
-                currentPlayer = humanPlayer; // Define o próximo jogador como humano
-            }, 500);
-        }
-    });
-
-    function updateScore(player, value) {
-        if (value !== undefined) {
-            scores[player] = value;
-        } else {
-            scores[player]++;
-        }
-        document.getElementById(`score${player.toUpperCase()}`).textContent = scores[player];
-        checkAndUpdateRecord(player); // Adicione esta linha
-    }
-
-    function resetGame() {
-        const cells = document.querySelectorAll('.cell');
-        cells.forEach(cell => {
-            cell.textContent = '';
-            cell.style.backgroundColor = '#eee';
-        });
-        gameBoard = ['', '', '', '', '', '', '', '', ''];
-        currentPlayer = 'x';
-        updateDisplayNames();
-        // Removidas as linhas que zeravam o placar
-    }
-
     </script>
 </body>
 </html>
