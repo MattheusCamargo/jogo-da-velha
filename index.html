@@ -209,6 +209,16 @@
         // Event listeners para seleção de modo
         document.getElementById('two-players').addEventListener('click', () => {
             isSinglePlayer = false;
+            humanPlayer = ''; // Não há jogador humano fixo no modo de dois jogadores
+            computerPlayer = ''; // Não há computador no modo de dois jogadores
+
+            // Oculta os botões de seleção de modo
+            document.querySelector('h3').style.display = 'none';
+            document.getElementById('two-players').style.display = 'none';
+            document.getElementById('single-player').style.display = 'none';
+
+            // Inicia o jogo
+            updateEditIcons(); // Atualiza os ícones de edição
             startGame();
         });
 
@@ -448,35 +458,38 @@
         editIcons.forEach(icon => {
             icon.addEventListener('click', (event) => {
                 const player = event.target.getAttribute('data-player');
-                if ((player === 'x' && humanPlayer === 'x') || (player === 'o' && humanPlayer === 'o')) {
-                    playerNamesEditDiv.style.display = 'block';
-
-                    // Exibe apenas o campo de edição correspondente à peça escolhida
-                    if (humanPlayer === 'x') {
-                        labelPlayerXName.style.display = 'block';
-                        document.getElementById('playerXName').style.display = 'block';
-                        labelPlayerOName.style.display = 'none';
-                        document.getElementById('playerOName').style.display = 'none';
-                        document.getElementById('playerXName').value = document.getElementById('displayPlayerX').textContent.trim();
-                    } else if (humanPlayer === 'o') {
-                        labelPlayerOName.style.display = 'block';
-                        document.getElementById('playerOName').style.display = 'block';
-                        labelPlayerXName.style.display = 'none';
-                        document.getElementById('playerXName').style.display = 'none';
-                        document.getElementById('playerOName').value = document.getElementById('displayPlayerO').textContent.trim();
-                    }
+                if (!isSinglePlayer || (isSinglePlayer && ((player === 'x' && humanPlayer === 'x') || (player === 'o' && humanPlayer === 'o')))) {
+                    showEditForm(player);
+                } else {
+                    alert("Você só pode editar o nome do jogador que está controlando!");
                 }
             });
         });
 
-        saveNamesButton.addEventListener('click', () => {
-            if (humanPlayer === 'x') {
-                const playerXName = document.getElementById('playerXName').value || "Player ❌";
-                document.getElementById('displayPlayerX').textContent = playerXName;
-            } else if (humanPlayer === 'o') {
-                const playerOName = document.getElementById('playerOName').value || "Player ⭕";
-                document.getElementById('displayPlayerO').textContent = playerOName;
+        function showEditForm(player) {
+            playerNamesEditDiv.style.display = 'block';
+
+            if (player === 'x') {
+                labelPlayerXName.style.display = 'block';
+                document.getElementById('playerXName').style.display = 'block';
+                labelPlayerOName.style.display = 'none';
+                document.getElementById('playerOName').style.display = 'none';
+                document.getElementById('playerXName').value = document.getElementById('displayPlayerX').textContent.trim();
+            } else if (player === 'o') {
+                labelPlayerOName.style.display = 'block';
+                document.getElementById('playerOName').style.display = 'block';
+                labelPlayerXName.style.display = 'none';
+                document.getElementById('playerXName').style.display = 'none';
+                document.getElementById('playerOName').value = document.getElementById('displayPlayerO').textContent.trim();
             }
+        }
+
+        saveNamesButton.addEventListener('click', () => {
+            const playerXName = document.getElementById('playerXName').value || "Player ❌";
+            const playerOName = document.getElementById('playerOName').value || "Player ⭕";
+
+            document.getElementById('displayPlayerX').textContent = playerXName;
+            document.getElementById('displayPlayerO').textContent = playerOName;
 
             playerNamesEditDiv.style.display = 'none';
         });
