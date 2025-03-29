@@ -76,7 +76,7 @@
         }
 
         .edit-icon.inactive:hover::after {
-            content: "Você só pode alterar o próprio nome";
+            content: "Não é possível alterar o nome do outro jogador";
             position: absolute;
             top: 100%; /* Exibe abaixo do ícone */
             left: 50%;
@@ -447,10 +447,16 @@
         function updateEditIcons() {
             editIcons.forEach(icon => {
                 const player = icon.getAttribute('data-player');
-                if ((player === 'x' && humanPlayer !== 'x') || (player === 'o' && humanPlayer !== 'o')) {
-                    icon.classList.add('inactive'); // Ofusca o ícone se o jogador não puder editar
+                if (isSinglePlayer) {
+                    // No modo de um jogador, apenas o humano pode editar o próprio nome
+                    if ((player === 'x' && humanPlayer !== 'x') || (player === 'o' && humanPlayer !== 'o')) {
+                        icon.classList.add('inactive'); // Ofusca o ícone e exibe a mensagem
+                    } else {
+                        icon.classList.remove('inactive'); // Ativa o ícone para o jogador humano
+                    }
                 } else {
-                    icon.classList.remove('inactive'); // Ativa o ícone para o jogador atual
+                    // No modo de dois jogadores, ambos podem editar
+                    icon.classList.remove('inactive');
                 }
             });
         }
@@ -459,6 +465,7 @@
             icon.addEventListener('click', (event) => {
                 const player = event.target.getAttribute('data-player');
                 if (!isSinglePlayer || (isSinglePlayer && ((player === 'x' && humanPlayer === 'x') || (player === 'o' && humanPlayer === 'o')))) {
+                    // Permite edição apenas se as condições forem atendidas
                     showEditForm(player);
                 } else {
                     alert("Você só pode editar o nome do jogador que está controlando!");
